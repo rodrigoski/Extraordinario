@@ -50,6 +50,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <a href="{{ route($prefix.'.appointments.pdf', $appointment) }}" target="_blank" class="text-emerald-600 hover:text-emerald-900 mr-3">Descargar PDF</a>
                                     <a href="{{ route($prefix.'.appointments.show', $appointment) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
                                     <a href="{{ route($prefix.'.appointments.edit', $appointment) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Editar</a>
                                     @if(auth()->user()->role === 'admin')

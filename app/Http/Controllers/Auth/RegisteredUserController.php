@@ -31,6 +31,12 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'last_name' => ['nullable', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:20', 'regex:/^[\d\s\-()+.\/]+$/', function ($attribute, $value, $fail) {
+                if (strlen(preg_replace('/\D/', '', $value)) !== 10) {
+                    $fail('El teléfono debe contener exactamente 10 dígitos.');
+                }
+            }],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
@@ -45,9 +51,9 @@ class RegisteredUserController extends Controller
         // Cada usuario cliente se asocia a un registro en la tabla clients.
         $user->client()->create([
             'name' => $request->name,
-            'last_name' => '',
+            'last_name' => $request->last_name ?? '',
             'email' => $request->email,
-            'phone' => '',
+            'phone' => $request->phone,
         ]);
 
         event(new Registered($user));

@@ -14,22 +14,37 @@
                         @method('PUT')
                     @endif
 
+                    @if($errors->any())
+                        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                            <strong>No se pudo guardar el cliente:</strong>
+                            <ul class="mt-1 list-disc list-inside text-sm">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Nombre</label>
                             <input type="text" name="name" value="{{ old('name', $client->name) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Apellido</label>
                             <input type="text" name="last_name" value="{{ old('last_name', $client->last_name) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            @error('last_name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Email</label>
                             <input type="email" name="email" value="{{ old('email', $client->email) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Teléfono</label>
-                            <input type="text" name="phone" value="{{ old('phone', $client->phone) }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            <input type="tel" name="phone" value="{{ old('phone', $client->phone) }}" maxlength="20" title="El teléfono debe contener exactamente 10 dígitos" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+                            @error('phone') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700">Dirección</label>

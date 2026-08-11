@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Comprobante de cita</title>
+    <title>Recordatorio de cita</title>
     <style>
         body { font-family: Arial, sans-serif; color: #1f2937; font-size: 14px; }
         .header { text-align: center; border-bottom: 3px solid #111827; padding-bottom: 12px; margin-bottom: 24px; }
@@ -18,7 +18,12 @@
 <body>
     <div class="header">
         <h1>BARBERMANAGER</h1>
-        <p>Comprobante de Cita</p>
+        <p>Recordatorio de Cita</p>
+    </div>
+
+    <div class="box" style="background:#fefce8; border-color:#fde047;">
+        <h2 style="color:#854d0e;">Recordatorio</h2>
+        <div><strong>{{ $appointment->client->name }},</strong> te recordamos tu próxima cita. Por favor llega 10 minutos antes de la hora agendada. Si necesitas reagendar o cancelar, contáctanos con anticipación.</div>
     </div>
 
     <div class="info">

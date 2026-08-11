@@ -32,11 +32,7 @@
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    @if($appointment->pdf_path)
-                                        <a href="{{ route('cliente.appointments.pdf', $appointment) }}" target="_blank" class="text-indigo-600 hover:text-indigo-900">Ver PDF</a>
-                                    @else
-                                        <span class="text-gray-400">Sin comprobante</span>
-                                    @endif
+                                    <a href="{{ route('cliente.appointments.pdf', $appointment) }}" target="_blank" class="text-emerald-600 hover:text-emerald-900">Descargar PDF</a>
                                 </td>
                             </tr>
                         @empty

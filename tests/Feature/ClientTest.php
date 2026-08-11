@@ -19,7 +19,7 @@ class ClientTest extends TestCase
             'name' => 'Ana',
             'last_name' => 'López',
             'email' => 'ana@example.com',
-            'phone' => '555123456',
+            'phone' => '5551234567',
         ]);
 
         $response->assertRedirect(route('admin.clients.index'));
@@ -45,11 +45,34 @@ class ClientTest extends TestCase
                 'name' => 'Ana',
                 'last_name' => 'López',
                 'email' => $client->email,
-                'phone' => '555999888',
+                'phone' => '5559998888',
             ])
             ->assertRedirect(route('admin.clients.index'));
 
-        $this->assertDatabaseHas('clients', ['id' => $client->id, 'name' => 'Ana', 'phone' => '555999888']);
+        $this->assertDatabaseHas('clients', ['id' => $client->id, 'name' => 'Ana', 'phone' => '5559998888']);
+    }
+
+    public function test_phone_must_contain_exactly_10_digits(): void
+    {
+        $admin = User::factory()->create(['role' => 'admin']);
+
+        $this->actingAs($admin)
+            ->post('/admin/clients', [
+                'name' => 'Ana',
+                'last_name' => 'López',
+                'email' => 'ana2@example.com',
+                'phone' => '9999',
+            ])
+            ->assertSessionHasErrors('phone');
+
+        $this->actingAs($admin)
+            ->post('/admin/clients', [
+                'name' => 'Ana',
+                'last_name' => 'López',
+                'email' => 'ana3@example.com',
+                'phone' => '55 1234-5678',
+            ])
+            ->assertSessionHasNoErrors();
     }
 
     public function test_client_can_be_soft_deleted(): void

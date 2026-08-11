@@ -110,11 +110,9 @@ class AppointmentController extends Controller
     {
         $this->authorize('view', $appointment);
 
-        if (! $appointment->pdf_path || ! Storage::disk('public')->exists($appointment->pdf_path)) {
-            abort(404, 'El comprobante no existe.');
-        }
+        $pdfPath = $this->ensurePdf($appointment);
 
-        return response()->file(Storage::disk('public')->path($appointment->pdf_path));
+        return response()->file(Storage::disk('public')->path($pdfPath));
     }
 
     public function myAppointments(): View
@@ -177,18 +175,34 @@ class AppointmentController extends Controller
     {
         $appointment->load(['client', 'employee', 'service']);
 
-        $pdfPath = 'appointments/appointment-'.$appointment->id.'.pdf';
-        $html = view('pdf.appointment', ['appointment' => $appointment])->render();
-        $pdf = Pdf::loadHTML($html);
-
-        Storage::disk('public')->put($pdfPath, $pdf->output());
-
-        $appointment->pdf_path = $pdfPath;
-        $appointment->save();
+        $pdfPath = $this->ensurePdf($appointment);
 
         if ($appointment->client && $appointment->client->email) {
             Mail::to($appointment->client->email)
                 ->send(new AppointmentConfirmationMail($appointment, $pdfPath));
         }
+    }
+
+    /**
+     * Genera (y persiste) el PDF de la cita si todavía no existe,
+     * devolviendo la ruta relativa en el disco público.
+     */
+    protected function ensurePdf(Appointment $appointment): string
+    {
+        $appointment->loadMissing(['client', 'employee', 'service']);
+
+        $pdfPath = $appointment->pdf_path ?? 'appointments/appointment-'.$appointment->id.'.pdf';
+
+        if (! Storage::disk('public')->exists($pdfPath)) {
+            $html = view('pdf.appointment', ['appointment' => $appointment])->render();
+            $pdf = Pdf::loadHTML($html);
+
+            Storage::disk('public')->put($pdfPath, $pdf->output());
+
+            $appointment->pdf_path = $pdfPath;
+            $appointment->save();
+        }
+
+        return $pdfPath;
     }
 }

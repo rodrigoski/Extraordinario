@@ -53,9 +53,7 @@
 
                 <div class="mt-6 flex justify-end gap-3">
                     <a href="{{ route($prefix.'.appointments.index') }}" class="px-4 py-2 bg-gray-200 rounded-md text-gray-700">Volver</a>
-                    @if($appointment->pdf_path)
-                        <a href="{{ route($prefix.'.appointments.pdf', $appointment) }}" target="_blank" class="px-4 py-2 bg-indigo-600 text-white rounded-md">Ver comprobante PDF</a>
-                    @endif
+                    <a href="{{ route($prefix.'.appointments.pdf', $appointment) }}" target="_blank" class="px-4 py-2 bg-emerald-600 text-white rounded-md">Descargar PDF</a>
                     @if(in_array(auth()->user()->role, ['admin', 'staff'], true))
                         <a href="{{ route($prefix.'.appointments.edit', $appointment) }}" class="px-4 py-2 bg-gray-900 text-white rounded-md">Editar</a>
                     @endif
