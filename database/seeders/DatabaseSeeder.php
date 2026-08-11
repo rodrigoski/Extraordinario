@@ -134,6 +134,10 @@ class DatabaseSeeder extends Seeder
 
     protected function seedAppointments(): void
     {
+        if (Appointment::exists()) {
+            return;
+        }
+
         $client = Client::where('email', 'cliente@barbermanager.test')->first();
         $juan = Employee::where('name', 'Juan')->first();
         $maria = Employee::where('name', 'María')->first();
